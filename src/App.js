@@ -2,33 +2,17 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import produce from "immer";
 
-const numRows = 50;
-const numCols = 50;
+import { genInitialCellularGrid } from "./utils";
 
 function App() {
-  const [grid, setGrid] = useState(() => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-      rows.push(Array.from(Array(numCols), () => 0));
-    }
-
-    return rows;
-  });
+  // States
+  const [numOfRows, setNumOfRows] = useState(50);
+  const [numOfCols, setNumOfCols] = useState(50);
+  const [grid, setGrid] = useState(
+    genInitialCellularGrid(numOfRows, numOfCols)
+  );
   const [running, setRunning] = useState(false);
   const [simulatorTimer, setSimulatorTimer] = useState(null);
-
-  const updateCellulars = (rowIndex, colIndex, currentStatus) => {
-    const newState = produce(grid, (gridCopy) => {
-      gridCopy[rowIndex][colIndex] = currentStatus ? 0 : 1;
-    });
-    setGrid(newState);
-  };
-
-  const runSimulation = () => {
-    console.log("it work");
-    const timer = setTimeout(runSimulation, 500);
-    setSimulatorTimer(timer);
-  };
 
   useEffect(() => {
     if (running) runSimulation();
@@ -36,24 +20,55 @@ function App() {
     return () => clearTimeout(simulatorTimer);
   }, [running]);
 
+  // Handler functions
+  const handleCellClick = (rowIndex, colIndex, currentStatus) => {
+    const newState = produce(grid, (gridCopy) => {
+      gridCopy[rowIndex][colIndex] = currentStatus ? 0 : 1;
+    });
+    setGrid(newState);
+  };
+
+  const runSimulation = () => {
+    // setGrid(grid => {
+    //   return produce(g, gridCopy => {
+    //     for (let i=0; i < numRows; i++) {
+    //       for (let j=0; j < numRows; j++) {
+    //         let neig
+    //       }
+    //     }
+    //   })
+    // })
+    console.log("it work");
+    const timer = setTimeout(runSimulation, 500);
+    setSimulatorTimer(timer);
+  };
+
+  const reset = () => {
+    setRunning(false);
+    setGrid(genInitialCellularGrid(numOfRows, numOfCols));
+  };
+
   return (
-    <Wrapper className="App" numCols={numCols}>
+    <Wrapper className="App" numCols={numOfCols}>
       <div className="btn-group">
         <button onClick={() => setRunning(!running)} className="btn">
           {running ? "Stop" : "Start"}
         </button>
-        <button className="btn">Reset</button>
+        <button onClick={reset} className="btn">
+          Reset
+        </button>
       </div>
       <div className="container-grid">
-        {grid.map((rows, rowIdx) =>
-          rows.map((col, colIdx) => (
-            <GridItem
-              key={`${rowIdx}-${colIdx}`}
-              status={col}
-              onClick={() => updateCellulars(rowIdx, colIdx, col)}
-            />
-          ))
-        )}
+        {grid &&
+          grid.map((rows, rowIdx) =>
+            rows.map((col, colIdx) => (
+              <GridItem
+                key={`${rowIdx}-${colIdx}`}
+                status={col}
+                onClick={() => handleCellClick(rowIdx, colIdx, col)}
+              />
+            ))
+          )}
       </div>
     </Wrapper>
   );
