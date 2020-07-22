@@ -3,23 +3,26 @@ import styled from "styled-components";
 import produce from "immer";
 
 import Header from "./components/Header";
-import { genInitialCellularGrid } from "./utils";
+import { create2DArray } from "./utils";
+import { runGame } from "./game";
 
 function App() {
   // States
-  const [numOfRows, setNumOfRows] = useState(25);
-  const [numOfCols, setNumOfCols] = useState(25);
-  const [grid, setGrid] = useState(
-    genInitialCellularGrid(numOfRows, numOfCols)
-  );
+  const [numOfRows, setNumOfRows] = useState(100);
+  const [numOfCols, setNumOfCols] = useState(150);
+  const [grid, setGrid] = useState(create2DArray(numOfRows, numOfCols));
   const [running, setRunning] = useState(false);
   const [simulatorTimer, setSimulatorTimer] = useState(null);
+  const [generations, setGenerations] = useState(0);
 
   useEffect(() => {
-    if (running) runSimulation();
-    else return clearTimeout(simulatorTimer);
+    if (running) {
+      runSimulation();
+      // Set generation
+      setGenerations(generations + 1);
+    } else return clearTimeout(simulatorTimer);
     return () => clearTimeout(simulatorTimer);
-  }, [running]);
+  }, [running, grid]);
 
   // Handler functions
   const handleCellClick = (rowIndex, colIndex, currentStatus) => {
@@ -42,22 +45,31 @@ function App() {
     //     }
     //   })
     // })
-    console.log("it work");
-    const timer = setTimeout(runSimulation, 500);
+    let newGrid = runGame(grid, numOfRows, numOfCols);
+    setGrid(newGrid);
+
+    const timer = setTimeout(runSimulation, 160);
     setSimulatorTimer(timer);
   };
 
   const reset = () => {
     setRunning(false);
-    setGrid(genInitialCellularGrid(numOfRows, numOfCols));
+    setGenerations(0);
+    setGrid(create2DArray(numOfRows, numOfCols));
+  };
+
+  const onRunning = () => {
+    if (!running) setGenerations(0);
+    setRunning(!running);
   };
 
   return (
     <Wrapper className="App" numCols={numOfCols}>
       <Header
-        onRunning={() => setRunning(!running)}
+        onRunning={onRunning}
         onReset={reset}
-        stimulationState={running}
+        gameState={running}
+        generations={generations}
       />
 
       <div className="container-grid">
@@ -94,16 +106,15 @@ const Wrapper = styled.div`
   .container-grid {
     display: grid;
     grid-gap: 0;
-    ${({ numCols }) => ` grid-template-columns: repeat(${numCols}, 20px)`};
+    ${({ numCols }) => ` grid-template-columns: repeat(${numCols}, 10px)`};
     border: 1px solid #f1f1f1;
     margin-top: 15px;
   }
   .grid-item {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     border-bottom: 1px solid #f1f1f1;
     border-right: 1px solid #f1f1f1;
-    transition: all 0.3s;
   }
   .bg-alive {
     background-color: black;
