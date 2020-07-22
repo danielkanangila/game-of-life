@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import produce from "immer";
 
@@ -6,23 +6,29 @@ import Header from "./components/Header";
 import { create2DArray } from "./utils";
 import { runGame } from "./game";
 
+const operations = [
+  [0, 1],
+  [0, -1],
+  [1, -1],
+  [-1, 1],
+  [1, 1],
+  [-1, -1],
+  [1, 0],
+  [-1, 0],
+];
+
 function App() {
   // States
-  const [numOfRows, setNumOfRows] = useState(100);
-  const [numOfCols, setNumOfCols] = useState(150);
+  const [numOfRows, setNumOfRows] = useState(50);
+  const [numOfCols, setNumOfCols] = useState(50);
+  const [cellSize, setCellSIze] = useState(10);
   const [grid, setGrid] = useState(create2DArray(numOfRows, numOfCols));
   const [running, setRunning] = useState(false);
   const [simulatorTimer, setSimulatorTimer] = useState(null);
   const [generations, setGenerations] = useState(0);
 
-  useEffect(() => {
-    if (running) {
-      runSimulation();
-      // Set generation
-      setGenerations(generations + 1);
-    } else return clearTimeout(simulatorTimer);
-    return () => clearTimeout(simulatorTimer);
-  }, [running, grid]);
+  const runningRef = useRef(running);
+  runningRef.current = running;
 
   // Handler functions
   const handleCellClick = (rowIndex, colIndex, currentStatus) => {
@@ -35,22 +41,41 @@ function App() {
     setGrid(newState);
   };
 
-  const runSimulation = () => {
-    // setGrid(grid => {
-    //   return produce(g, gridCopy => {
-    //     for (let i=0; i < numRows; i++) {
-    //       for (let j=0; j < numRows; j++) {
-    //         let neig
-    //       }
-    //     }
-    //   })
-    // })
-    let newGrid = runGame(grid, numOfRows, numOfCols);
-    setGrid(newGrid);
+  const runSimulation = useCallback(() => {
+    if (!runningRef.current) {
+      return;
+    }
 
-    const timer = setTimeout(runSimulation, 160);
-    setSimulatorTimer(timer);
-  };
+    setGrid((g) => {
+      return produce(g, (gridCopy) => {
+        g.map((rows, i) => {
+          rows.map((col, k) => {
+            let neighbors = 0;
+            operations.forEach(([x, y]) => {
+              const newI = i + x;
+              const newK = k + y;
+              if (
+                newI >= 0 &&
+                newI < numOfRows &&
+                newK >= 0 &&
+                newK < numOfCols
+              ) {
+                neighbors += g[newI][newK];
+              }
+            });
+
+            if (neighbors < 2 || neighbors > 3) {
+              gridCopy[i][k] = 0;
+            } else if (g[i][k] === 0 && neighbors === 3) {
+              gridCopy[i][k] = 1;
+            }
+          });
+        });
+      });
+    });
+
+    setTimeout(runSimulation, 100);
+  }, []);
 
   const reset = () => {
     setRunning(false);
@@ -61,10 +86,12 @@ function App() {
   const onRunning = () => {
     if (!running) setGenerations(0);
     setRunning(!running);
+    runningRef.current = true;
+    runSimulation();
   };
 
   return (
-    <Wrapper className="App" numCols={numOfCols}>
+    <Wrapper className="App" numCols={numOfCols} cellSize={cellSize}>
       <Header
         onRunning={onRunning}
         onReset={reset}
@@ -106,13 +133,13 @@ const Wrapper = styled.div`
   .container-grid {
     display: grid;
     grid-gap: 0;
-    ${({ numCols }) => ` grid-template-columns: repeat(${numCols}, 10px)`};
+    ${({ numCols, cellSize }) =>
+      ` grid-template-columns: repeat(${numCols}, ${cellSize}px)`};
     border: 1px solid #f1f1f1;
     margin-top: 15px;
   }
   .grid-item {
-    width: 10px;
-    height: 10px;
+    ${({ cellSize }) => `width: ${cellSize}px; height: ${cellSize}px;`};
     border-bottom: 1px solid #f1f1f1;
     border-right: 1px solid #f1f1f1;
   }
