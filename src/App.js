@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import produce from "immer";
 
+import Header from "./components/Header";
 import { genInitialCellularGrid } from "./utils";
 
 function App() {
   // States
-  const [numOfRows, setNumOfRows] = useState(50);
-  const [numOfCols, setNumOfCols] = useState(50);
+  const [numOfRows, setNumOfRows] = useState(25);
+  const [numOfCols, setNumOfCols] = useState(25);
   const [grid, setGrid] = useState(
     genInitialCellularGrid(numOfRows, numOfCols)
   );
@@ -22,6 +23,9 @@ function App() {
 
   // Handler functions
   const handleCellClick = (rowIndex, colIndex, currentStatus) => {
+    // Do nothing when stimulation is running
+    if (running) return;
+
     const newState = produce(grid, (gridCopy) => {
       gridCopy[rowIndex][colIndex] = currentStatus ? 0 : 1;
     });
@@ -50,14 +54,12 @@ function App() {
 
   return (
     <Wrapper className="App" numCols={numOfCols}>
-      <div className="btn-group">
-        <button onClick={() => setRunning(!running)} className="btn">
-          {running ? "Stop" : "Start"}
-        </button>
-        <button onClick={reset} className="btn">
-          Reset
-        </button>
-      </div>
+      <Header
+        onRunning={() => setRunning(!running)}
+        onReset={reset}
+        stimulationState={running}
+      />
+
       <div className="container-grid">
         {grid &&
           grid.map((rows, rowIdx) =>
@@ -110,32 +112,6 @@ const Wrapper = styled.div`
   .bg-dead {
     background-color: white;
     border: inherit;
-  }
-  .btn {
-    padding: 10px 25px;
-    border: 2px solid #ccc;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: all 0.3s;
-    cursor: pointer;
-    &:hover {
-      background-color: #ccc;
-    }
-  }
-  .btn-group {
-    .btn {
-      &:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-right: none;
-      }
-      &:last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
   }
 `;
 
