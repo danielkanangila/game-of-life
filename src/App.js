@@ -4,6 +4,7 @@ import produce from "immer";
 
 import Header from "./components/Header";
 import { create2DArray, newGenerations } from "./utils";
+import Cells from "./components/cells/Cells";
 
 function App() {
   // States
@@ -75,8 +76,8 @@ function App() {
         gameState={running}
         generations={generations}
       />
-
-      <div className="container-grid">
+      <Cells />
+      {/* <div className="container-grid">
         {grid &&
           grid.map((rows, rowIdx) =>
             rows.map((col, colIdx) => (
@@ -87,7 +88,7 @@ function App() {
               />
             ))
           )}
-      </div>
+      </div> */}
     </Wrapper>
   );
 }
