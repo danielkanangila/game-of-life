@@ -3,25 +3,13 @@ import styled from "styled-components";
 import produce from "immer";
 
 import Header from "./components/Header";
-import { create2DArray } from "./utils";
-import { runGame } from "./game";
-
-const operations = [
-  [0, 1],
-  [0, -1],
-  [1, -1],
-  [-1, 1],
-  [1, 1],
-  [-1, -1],
-  [1, 0],
-  [-1, 0],
-];
+import { create2DArray, newGenerations } from "./utils";
 
 function App() {
   // States
-  const [numOfRows, setNumOfRows] = useState(50);
-  const [numOfCols, setNumOfCols] = useState(50);
-  const [cellSize, setCellSIze] = useState(10);
+  const [numOfRows, setNumOfRows] = useState(25);
+  const [numOfCols, setNumOfCols] = useState(25);
+  const [cellSize, setCellSIze] = useState(20);
   const [grid, setGrid] = useState(create2DArray(numOfRows, numOfCols));
   const [running, setRunning] = useState(false);
   const [simulatorTimer, setSimulatorTimer] = useState(null);
@@ -46,29 +34,18 @@ function App() {
       return;
     }
 
-    setGrid((g) => {
-      return produce(g, (gridCopy) => {
-        g.map((rows, i) => {
-          rows.map((col, k) => {
-            let neighbors = 0;
-            operations.forEach(([x, y]) => {
-              const newI = i + x;
-              const newK = k + y;
-              if (
-                newI >= 0 &&
-                newI < numOfRows &&
-                newK >= 0 &&
-                newK < numOfCols
-              ) {
-                neighbors += g[newI][newK];
-              }
-            });
-
-            if (neighbors < 2 || neighbors > 3) {
-              gridCopy[i][k] = 0;
-            } else if (g[i][k] === 0 && neighbors === 3) {
-              gridCopy[i][k] = 1;
-            }
+    setGrid((cells) => {
+      return produce(cells, (cellsCopy) => {
+        cells.map((rows, rowIndex) => {
+          rows.map((col, colIndex) => {
+            cellsCopy = newGenerations(
+              cells,
+              cellsCopy,
+              rowIndex,
+              colIndex,
+              numOfRows,
+              numOfCols
+            );
           });
         });
       });

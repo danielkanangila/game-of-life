@@ -10,10 +10,10 @@ const Header = ({ generations, onRunning, onReset, gameState }) => {
       </div>
       <div className="btn-group">
         <button onClick={onRunning} className="btn">
-          {gameState ? "Stop" : "Start"}
+          {gameState ? "Pause" : "Start"}
         </button>
         <button onClick={onReset} className="btn">
-          Reset
+          Stop
         </button>
       </div>
     </Wrapper>
