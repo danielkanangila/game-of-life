@@ -1,3 +1,5 @@
+import Cells from "../components/cells/Cells";
+
 export const offsets = [
   [0, 1],
   [0, -1],
@@ -54,12 +56,14 @@ export const newGenerations = (
     numOfCols
   );
 
+  const cCopy = cells;
+
   if (aliveNeighbors < 2 || aliveNeighbors > 3) {
-    cellsCopy[rowIndex][colIndex] = 0;
+    cCopy[rowIndex][colIndex] = 0;
   } else if (cells[rowIndex][colIndex] === 0 && aliveNeighbors === 3) {
-    cellsCopy[rowIndex][colIndex] = 1;
+    cCopy[rowIndex][colIndex] = 1;
   }
 
   // New generations
-  return cellsCopy;
+  return cCopy;
 };

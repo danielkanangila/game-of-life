@@ -1,54 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import produce from "immer";
 
 import Cell from "./Cell";
-import { create2DArray } from "./../../utils";
-import { useSettings } from "../../hooks/useSettings";
+import { useSettings, useGameplay } from "../../hooks";
 
 const Cells = () => {
-  const settings = useSettings();
-  const [cells, setCells] = useState(
-    create2DArray(settings.settings.numOfRows, settings.settings.numOfCols)
-  );
-
-  const handleCellClick = (rowIndex, colIndex, currentCellStatus) => {
-    if (settings.running) return;
-
-    const newState = produce(cells, (cellsCopy) => {
-      cellsCopy[rowIndex][colIndex] = currentCellStatus ? 0 : 1;
-    });
-    setCells(newState);
-  };
-
-  useEffect(() => {
-    if (settings.settings.isResetCall) {
-      // Reset cells
-      setCells(
-        create2DArray(settings.settings.numOfRows, settings.settings.numOfCols)
-      );
-      // set isResetCall to false
-      settings.setSettings({
-        ...settings.settings,
-        isResetCall: false,
-      });
-    }
-  }, [settings.settings.isResetCall]);
+  const { settings } = useSettings();
+  const { gameplay } = useGameplay();
 
   return (
     <Wrapper
-      numOfCols={settings.settings.numOfCols}
-      cellSize={settings.settings.cellSize}
+      numOfCols={settings.numOfCols}
+      cellSize={settings.cellSize}
       className="container-cell"
-      borderColor={settings.settings.borderColor}
+      borderColor={settings.borderColor}
     >
-      {cells &&
-        cells.map((rows, rowIndex) =>
+      {gameplay?.cells &&
+        gameplay?.cells.map((rows, rowIndex) =>
           rows.map((col, colIndex) => (
             <Cell
               key={`${rowIndex}-${colIndex}`}
-              status={col}
-              updateStatus={() => handleCellClick(rowIndex, colIndex, col)}
+              val={col}
+              rowIndex={rowIndex}
+              colIndex={colIndex}
             />
           ))
         )}

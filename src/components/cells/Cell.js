@@ -1,17 +1,35 @@
 import React from "react";
 import styled from "styled-components";
-import { useSettings } from "../../hooks/useSettings";
+import produce from "immer";
 
-const Cell = ({ status, updateStatus }) => {
-  const settings = useSettings();
+import { useSettings, useGameplay } from "../../hooks";
+
+const Cell = ({ rowIndex, colIndex, val }) => {
+  const { settings } = useSettings();
+  const { gameplay, play } = useGameplay();
+
+  const handleClick = () => {
+    if (settings.running) return;
+
+    const newState = produce(gameplay.cells, (cellsCopy) => {
+      cellsCopy[rowIndex][colIndex] = val ? 0 : 1;
+    });
+    play({
+      action: "initialize",
+      data: {
+        ...gameplay,
+        cells: newState,
+      },
+    });
+  };
 
   return (
     <Wrapper
-      onClick={updateStatus}
-      className={`cell ${status ? "alive" : "dead"}`}
-      size={settings.settings.cellSize}
-      borderSize={settings.settings.borderSize}
-      borderColor={settings.settings.borderColor}
+      onClick={handleClick}
+      className={`cell ${val ? "alive" : "dead"}`}
+      size={settings.cellSize}
+      borderSize={settings.borderSize}
+      borderColor={settings.borderColor}
     ></Wrapper>
   );
 };

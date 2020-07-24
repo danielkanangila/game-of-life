@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import produce from "immer";
 
-import Header from "./components/Header";
+import Control from "./components/Control";
 import Cells from "./components/cells/Cells";
 import { AppContext } from "./contexts";
-import { newGenerations } from "./utils";
+import Game from "./components/Game";
 
 function App() {
   // States
@@ -23,43 +22,17 @@ function App() {
     isResetCall: false,
   });
   const [gameplay, setGameplay] = useState({
-    currentGenerations: null,
+    cells: [],
     newGenerations: null,
     generations: 0,
   });
-  const [numOfRows, setNumOfRows] = useState(25);
-  const [numOfCols, setNumOfCols] = useState(25);
-
-  const runSimulation = useCallback(() => {
-    // if (!runningRef.current) {
-    //   return;
-    // }
-    // setGrid((cells) => {
-    //   return produce(cells, (cellsCopy) => {
-    //     cells.map((rows, rowIndex) => {
-    //       rows.map((col, colIndex) => {
-    //         cellsCopy = newGenerations(
-    //           cells,
-    //           cellsCopy,
-    //           rowIndex,
-    //           colIndex,
-    //           numOfRows,
-    //           numOfCols
-    //         );
-    //       });
-    //     });
-    //   });
-    // });
-    // setTimeout(runSimulation, 100);
-  }, []);
 
   return (
     <AppContext.Provider
       value={{ settings, setSettings, gameplay, setGameplay }}
     >
       <Main className="app">
-        <Header />
-        <Cells />
+        <Game />
       </Main>
     </AppContext.Provider>
   );

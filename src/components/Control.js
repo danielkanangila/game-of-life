@@ -1,34 +1,50 @@
 import React from "react";
 import styled from "styled-components";
 import { useSettings } from "../hooks/useSettings";
+import { useGameplay } from "../hooks/useGameplay";
 
-const Header = () => {
-  const settings = useSettings();
+const Control = () => {
+  const { settings, setSettings } = useSettings();
+  const { gameplay, play } = useGameplay();
 
   const onStop = () => {
-    settings.setSettings({
-      ...settings.settings,
+    setSettings({
+      ...settings,
       running: false,
-      generations: 0,
       isResetCall: true,
+    });
+    play({ action: "run", data: { running: false } });
+    play({
+      action: "initialize",
+      data: {
+        ...gameplay,
+        generations: 0,
+      },
     });
   };
 
   const onRunning = () => {
-    settings.setSettings({
-      ...settings.settings,
-      running: !settings.settings.running,
+    setSettings({
+      ...settings,
+      running: !settings.running,
+    });
+    play({
+      action: "run",
+      data: {
+        running: !settings.running,
+        cells: gameplay.cells,
+      },
     });
   };
   return (
     <Wrapper className="header">
       <div className="gen-display">
         <span>Generations</span>
-        <span>{settings.settings.generations}</span>
+        <span>{gameplay?.generations}</span>
       </div>
       <div className="btn-group">
         <button onClick={onRunning} className="btn">
-          {settings.settings.running ? "Pause" : "Start"}
+          {settings.running ? "Pause" : "Start"}
         </button>
         <button onClick={onStop} className="btn">
           Stop
@@ -41,7 +57,7 @@ const Header = () => {
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   .btn-group {
     .btn {
@@ -78,4 +94,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default Header;
+export default Control;
