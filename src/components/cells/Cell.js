@@ -1,14 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { useSettings } from "../../hooks/useSettings";
 
-const Cell = ({ size, status, updateStatus, borderSize, borderColor }) => {
+const Cell = ({ status, updateStatus }) => {
+  const settings = useSettings();
+
   return (
     <Wrapper
       onClick={updateStatus}
       className={`cell ${status ? "alive" : "dead"}`}
-      size={size}
-      borderSize={borderSize}
-      borderColor={borderColor}
+      size={settings.settings.cellSize}
+      borderSize={settings.settings.borderSize}
+      borderColor={settings.settings.borderColor}
     ></Wrapper>
   );
 };

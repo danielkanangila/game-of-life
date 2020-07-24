@@ -1,18 +1,36 @@
 import React from "react";
 import styled from "styled-components";
+import { useSettings } from "../hooks/useSettings";
 
-const Header = ({ generations, onRunning, onReset, gameState }) => {
+const Header = () => {
+  const settings = useSettings();
+
+  const onStop = () => {
+    settings.setSettings({
+      ...settings.settings,
+      running: false,
+      generations: 0,
+      isResetCall: true,
+    });
+  };
+
+  const onRunning = () => {
+    settings.setSettings({
+      ...settings.settings,
+      running: !settings.settings.running,
+    });
+  };
   return (
     <Wrapper className="header">
       <div className="gen-display">
         <span>Generations</span>
-        <span>{generations}</span>
+        <span>{settings.settings.generations}</span>
       </div>
       <div className="btn-group">
         <button onClick={onRunning} className="btn">
-          {gameState ? "Pause" : "Start"}
+          {settings.settings.running ? "Pause" : "Start"}
         </button>
-        <button onClick={onReset} className="btn">
+        <button onClick={onStop} className="btn">
           Stop
         </button>
       </div>

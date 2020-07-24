@@ -1,25 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import produce from "immer";
 
 import Cell from "./Cell";
 import { create2DArray } from "./../../utils";
+import { useSettings } from "../../hooks/useSettings";
 
 const Cells = () => {
-  const [settings, setSettings] = useState({
-    numOfRows: 25,
-    numOfCols: 25,
-    cellSize: 20,
-    borderSize: 1,
-    borderColor: "#f1f1f1",
-    backgroundColor: "#fff",
-    aliveCellColor: "#000",
-    deadCellColor: "#fff",
-    running: false,
-    generations: 0,
-  });
+  const settings = useSettings();
   const [cells, setCells] = useState(
-    create2DArray(settings.numOfRows, settings.numOfCols)
+    create2DArray(settings.settings.numOfRows, settings.settings.numOfCols)
   );
 
   const handleCellClick = (rowIndex, colIndex, currentCellStatus) => {
@@ -31,23 +21,34 @@ const Cells = () => {
     setCells(newState);
   };
 
+  useEffect(() => {
+    if (settings.settings.isResetCall) {
+      // Reset cells
+      setCells(
+        create2DArray(settings.settings.numOfRows, settings.settings.numOfCols)
+      );
+      // set isResetCall to false
+      settings.setSettings({
+        ...settings.settings,
+        isResetCall: false,
+      });
+    }
+  }, [settings.settings.isResetCall]);
+
   return (
     <Wrapper
-      numOfCols={settings.numOfCols}
-      cellSize={settings.cellSize}
+      numOfCols={settings.settings.numOfCols}
+      cellSize={settings.settings.cellSize}
       className="container-cell"
-      borderColor={settings.borderColor}
+      borderColor={settings.settings.borderColor}
     >
       {cells &&
         cells.map((rows, rowIndex) =>
           rows.map((col, colIndex) => (
             <Cell
               key={`${rowIndex}-${colIndex}`}
-              size={settings.cellSize}
               status={col}
               updateStatus={() => handleCellClick(rowIndex, colIndex, col)}
-              borderSize={settings.borderSize}
-              borderColor={settings.borderColor}
             />
           ))
         )}
