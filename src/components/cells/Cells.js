@@ -2,12 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 import Cell from "./Cell";
-import { useSettings, useGameplay } from "../../hooks";
+import { useSettings } from "../../hooks";
 
-const Cells = () => {
+const Cells = ({ cells, handleCellClick }) => {
   const { settings } = useSettings();
-  const { gameplay } = useGameplay();
-
   return (
     <Wrapper
       numOfCols={settings.numOfCols}
@@ -15,14 +13,15 @@ const Cells = () => {
       className="container-cell"
       borderColor={settings.borderColor}
     >
-      {gameplay?.cells &&
-        gameplay?.cells.map((rows, rowIndex) =>
+      {cells &&
+        cells.map((rows, rowIndex) =>
           rows.map((col, colIndex) => (
             <Cell
               key={`${rowIndex}-${colIndex}`}
               val={col}
               rowIndex={rowIndex}
               colIndex={colIndex}
+              onClick={() => handleCellClick(rowIndex, colIndex, col)}
             />
           ))
         )}

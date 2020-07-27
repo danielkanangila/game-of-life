@@ -1,47 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { useSettings } from "../hooks/useSettings";
-import { useGameplay } from "../hooks/useGameplay";
 
-const Control = () => {
+const Control = ({ onPlay, onStop }) => {
   const { settings, setSettings } = useSettings();
-  const { gameplay, play } = useGameplay();
 
-  const onStop = () => {
-    setSettings({
-      ...settings,
-      running: false,
-      isResetCall: true,
-    });
-    play({ action: "run", data: { running: false } });
-    play({
-      action: "initialize",
-      data: {
-        ...gameplay,
-        generations: 0,
-      },
-    });
-  };
-
-  const onRunning = () => {
+  const onRunning = async () => {
+    await onPlay();
     setSettings({
       ...settings,
       running: !settings.running,
     });
-    play({
-      action: "run",
-      data: {
-        running: !settings.running,
-        cells: gameplay.cells,
-      },
-    });
   };
   return (
     <Wrapper className="header">
-      <div className="gen-display">
+      {/* <div className="gen-display">
         <span>Generations</span>
         <span>{gameplay?.generations}</span>
-      </div>
+      </div> */}
       <div className="btn-group">
         <button onClick={onRunning} className="btn">
           {settings.running ? "Pause" : "Start"}

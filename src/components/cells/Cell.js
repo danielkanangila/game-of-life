@@ -2,30 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import produce from "immer";
 
-import { useSettings, useGameplay } from "../../hooks";
+import { useSettings } from "../../hooks";
 
-const Cell = ({ rowIndex, colIndex, val }) => {
+const Cell = ({ rowIndex, colIndex, val, onClick }) => {
   const { settings } = useSettings();
-  const { gameplay, play } = useGameplay();
-
-  const handleClick = () => {
-    if (settings.running) return;
-
-    const newState = produce(gameplay.cells, (cellsCopy) => {
-      cellsCopy[rowIndex][colIndex] = val ? 0 : 1;
-    });
-    play({
-      action: "initialize",
-      data: {
-        ...gameplay,
-        cells: newState,
-      },
-    });
-  };
 
   return (
     <Wrapper
-      onClick={handleClick}
+      onClick={onClick}
       className={`cell ${val ? "alive" : "dead"}`}
       size={settings.cellSize}
       borderSize={settings.borderSize}
