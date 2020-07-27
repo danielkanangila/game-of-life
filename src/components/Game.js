@@ -4,7 +4,7 @@ import produce from "immer";
 
 import Control from "./Control";
 import Cells from "./cells/Cells";
-import { create2DArray, newGenerations, computeNeighbors } from "../utils";
+import { create2DArray, newGenerations } from "../utils";
 import { useSettings } from "../hooks";
 
 const Game = () => {
@@ -21,7 +21,7 @@ const Game = () => {
     setCells(initialGen);
   };
 
-  const runSimulation = useCallback(() => {
+  const runSimulation = () => {
     setCells((c) => {
       return produce(c, (cellsCopy) => {
         c.map((rows, rowIndex) => {
@@ -38,7 +38,7 @@ const Game = () => {
         });
       });
     });
-  }, []);
+  };
 
   const onPlay = async () => {
     if (!!settings.running) return clearTimeout(runningTimer);
@@ -55,9 +55,21 @@ const Game = () => {
     clearInterval(runningTimer);
   };
 
+  const seed = () => {
+    setCells((c) => {
+      return produce(c, (cellsCopy) => {
+        c.map((rows, rowIndex) => {
+          rows.map((col, colIndex) => {
+            cellsCopy[rowIndex][colIndex] = Math.round(Math.random());
+          });
+        });
+      });
+    });
+  };
+
   return (
     <Wrapper>
-      <Control onPlay={onPlay} onStop={onStop} />
+      <Control onPlay={onPlay} onStop={onStop} onSeed={seed} />
       <Cells cells={cells} handleCellClick={handleCellClick} />
     </Wrapper>
   );

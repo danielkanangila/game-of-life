@@ -9,9 +9,9 @@ import Game from "./components/Game";
 function App() {
   // States
   const [settings, setSettings] = useState({
-    numOfRows: 25,
-    numOfCols: 25,
-    cellSize: 20,
+    numOfRows: 50,
+    numOfCols: 50,
+    cellSize: 15,
     borderSize: 1,
     borderColor: "#f1f1f1",
     backgroundColor: "#fff",

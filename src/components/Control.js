@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSettings } from "../hooks/useSettings";
 
-const Control = ({ onPlay, onStop }) => {
+const Control = ({ onPlay, onStop, onSeed }) => {
   const { settings, setSettings } = useSettings();
 
   const onRunning = async () => {
@@ -24,6 +24,9 @@ const Control = ({ onPlay, onStop }) => {
         </button>
         <button onClick={onStop} className="btn">
           Stop
+        </button>
+        <button onClick={onSeed} className="btn">
+          Seed
         </button>
       </div>
     </Wrapper>
