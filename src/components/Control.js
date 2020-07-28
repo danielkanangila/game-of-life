@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSettings } from "../hooks/useSettings";
+import Icon from "./Icon";
 
 const Control = ({ onPlay, onStop, onSeed }) => {
   const { settings, setSettings } = useSettings();
@@ -19,6 +20,7 @@ const Control = ({ onPlay, onStop, onSeed }) => {
           {settings.running ? "Pause" : "Start"}
         </button>
         <button onClick={onStop} className="btn">
+          <Icon name="stop" />
           Stop
         </button>
         <button onClick={onSeed} className="btn">

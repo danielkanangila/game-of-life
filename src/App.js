@@ -6,6 +6,7 @@ import Game from "./components/Game";
 import Hamburger from "./components/Hamburger";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import Sidebar from "./components/Sidebar";
+import Logo from "./components/Logo";
 
 function App() {
   // States
@@ -29,6 +30,9 @@ function App() {
   return (
     <AppContext.Provider value={{ settings, setSettings }}>
       <Main className="app" bgColor={settings.backgroundColor}>
+        <div className="logo">
+          <Logo />
+        </div>
         <div className={`app-menu${openSidebar ? " sb-open" : ""}`}>
           <Hamburger onClick={() => setOpenSidebar((status) => !status)} />
         </div>
@@ -67,6 +71,15 @@ const Main = styled.div`
     }
     &-close {
       width: 0;
+    }
+  }
+  .logo {
+    display: none;
+    @media (min-width: 750px) {
+      display: block;
+      position: absolute;
+      top: 15px;
+      left: 2rem;
     }
   }
 `;
