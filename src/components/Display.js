@@ -23,6 +23,9 @@ const Wrapper = styled.div`
   }
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  -webkit-box-shadow: -1px -3px 6px -1px rgba(105, 105, 105, 1);
+  -moz-box-shadow: -1px -3px 6px -1px rgba(105, 105, 105, 1);
+  box-shadow: -1px -3px 6px -1px rgba(105, 105, 105, 1);
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#45484d+0,000000+100;Black+3D+%231 */
   background: #45484d; /* Old browsers */
   background: -moz-linear-gradient(
