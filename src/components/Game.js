@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import produce from "immer";
 
@@ -6,6 +6,7 @@ import Control from "./Control";
 import Cells from "./cells/Cells";
 import { create2DArray, newGenerations } from "../utils";
 import { useSettings } from "../hooks";
+import Display from "./Display";
 
 const Game = () => {
   const { settings, setSettings } = useSettings();
@@ -13,7 +14,23 @@ const Game = () => {
     create2DArray(settings.numOfRows, settings.numOfCols)
   );
   const [cells, setCells] = useState(initialCells);
-  const [runningTimer, setRunningTimer] = useState(null);
+  const [timerId, settimerId] = useState(null);
+  const [generations, setGenerations] = useState(0);
+  const [speed, setSpeed] = useState(160);
+
+  useEffect(() => {
+    let interval = null;
+    if (settings.running) {
+      interval = setInterval(() => {
+        setGenerations(generations + 1);
+      }, speed);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [settings.running, generations]);
+
   const handleCellClick = (rowIndex, colIndex, val) => {
     const initialGen = produce(cells, (cellsCopy) => {
       cellsCopy[rowIndex][colIndex] = val ? 0 : 1;
@@ -40,19 +57,22 @@ const Game = () => {
     });
   };
 
-  const onPlay = async () => {
-    if (!!settings.running) return clearTimeout(runningTimer);
+  let counter = 0;
+
+  const onPlay = useCallback(() => {
+    if (!!settings.running) return clearTimeout(timerId);
     runSimulation();
-    setRunningTimer(setTimeout(onPlay, 100));
-  };
+    settimerId(setTimeout(onPlay, speed));
+  });
 
   const onStop = () => {
     setSettings({
       ...settings,
       running: false,
     });
+    setGenerations(0);
     setCells(initialCells);
-    clearInterval(runningTimer);
+    clearInterval(timerId);
   };
 
   const seed = () => {
@@ -71,6 +91,7 @@ const Game = () => {
     <Wrapper>
       <Control onPlay={onPlay} onStop={onStop} onSeed={seed} />
       <Cells cells={cells} handleCellClick={handleCellClick} />
+      <Display generations={generations} />
     </Wrapper>
   );
 };

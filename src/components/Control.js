@@ -14,10 +14,6 @@ const Control = ({ onPlay, onStop, onSeed }) => {
   };
   return (
     <Wrapper className="header">
-      {/* <div className="gen-display">
-        <span>Generations</span>
-        <span>{gameplay?.generations}</span>
-      </div> */}
       <div className="btn-group">
         <button onClick={onRunning} className="btn">
           {settings.running ? "Pause" : "Start"}

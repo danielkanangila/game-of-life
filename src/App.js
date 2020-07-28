@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import Control from "./components/Control";
-import Cells from "./components/cells/Cells";
 import { AppContext } from "./contexts";
 import Game from "./components/Game";
 
 function App() {
   // States
   const [settings, setSettings] = useState({
-    numOfRows: 50,
-    numOfCols: 50,
+    numOfRows: 25,
+    numOfCols: 25,
     cellSize: 15,
     borderSize: 1,
     borderColor: "#f1f1f1",

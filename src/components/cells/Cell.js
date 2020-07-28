@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import produce from "immer";
 
 import { useSettings } from "../../hooks";
 
-const Cell = ({ rowIndex, colIndex, val, onClick }) => {
+const Cell = ({ val, onClick }) => {
   const { settings } = useSettings();
 
   return (
