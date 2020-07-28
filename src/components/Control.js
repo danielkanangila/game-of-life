@@ -17,6 +17,7 @@ const Control = ({ onPlay, onStop, onSeed }) => {
     <Wrapper className="header">
       <div className="btn-group">
         <button onClick={onRunning} className="btn">
+          <Icon name={settings.running ? "pause" : "play_arrow"} />
           {settings.running ? "Pause" : "Start"}
         </button>
         <button onClick={onStop} className="btn">
@@ -24,6 +25,7 @@ const Control = ({ onPlay, onStop, onSeed }) => {
           Stop
         </button>
         <button onClick={onSeed} className="btn">
+          <Icon name="blur_on" />
           Seed
         </button>
       </div>
@@ -70,8 +72,18 @@ const Wrapper = styled.div`
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 
   .btn-group {
+    display: flex;
+    align-items: center;
     .btn {
       color: #fff;
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 10px 17px;
+      span {
+        font-size: 1rem;
+        margin-right: 5px;
+      }
       &:nth-child(1) {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
