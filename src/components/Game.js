@@ -32,6 +32,7 @@ const Game = () => {
   }, [settings.running, generations]);
 
   const handleCellClick = (rowIndex, colIndex, val) => {
+    if (settings.running) return;
     const initialGen = produce(cells, (cellsCopy) => {
       cellsCopy[rowIndex][colIndex] = val ? 0 : 1;
     });
@@ -74,6 +75,7 @@ const Game = () => {
   };
 
   const seed = () => {
+    if (settings.running) return;
     setCells((c) => {
       return produce(c, (cellsCopy) => {
         c.map((rows, rowIndex) => {
