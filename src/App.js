@@ -29,7 +29,7 @@ function App() {
     <AppContext.Provider
       value={{ settings, setSettings, gameplay, setGameplay }}
     >
-      <Main className="app">
+      <Main className="app" bgColor={settings.backgroundColor}>
         <Game />
       </Main>
     </AppContext.Provider>
@@ -41,7 +41,10 @@ const Main = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px 2rem;
+  height: 100vh;
+  width: 100%;
+  ${({ bgColor }) => `background-color: ${bgColor};`};
+  overflow: hidden;
 `;
 
 export default App;

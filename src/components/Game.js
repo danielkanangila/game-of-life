@@ -57,8 +57,6 @@ const Game = () => {
     });
   };
 
-  let counter = 0;
-
   const onPlay = useCallback(() => {
     if (!!settings.running) return clearTimeout(timerId);
     runSimulation();
