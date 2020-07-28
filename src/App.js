@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { AppContext } from "./contexts";
 import Game from "./components/Game";
+import Hamburger from "./components/Hamburger";
 
 function App() {
   // States
   const [settings, setSettings] = useState({
     numOfRows: 25,
-    numOfCols: 25,
-    cellSize: 15,
+    numOfCols: 50,
+    cellSize: 20,
     borderSize: 1,
-    borderColor: "#f1f1f1",
-    backgroundColor: "#fff",
-    aliveCellColor: "#000",
-    deadCellColor: "#fff",
+    borderColor: "#fff",
+    backgroundColor: "#1B1C1E",
+    aliveCellColor: "#fff",
+    deadCellColor: "#1B1C1E",
     running: false,
     generations: 0,
     isResetCall: false,
+    windowWidth: window.outerHeight,
+    windowHeight: window.innerHeight,
   });
   const [gameplay, setGameplay] = useState({
     cells: [],
@@ -30,6 +33,9 @@ function App() {
       value={{ settings, setSettings, gameplay, setGameplay }}
     >
       <Main className="app" bgColor={settings.backgroundColor}>
+        <div className="app-menu">
+          <Hamburger onClick={() => {}} />
+        </div>
         <Game />
       </Main>
     </AppContext.Provider>
@@ -43,8 +49,16 @@ const Main = styled.div`
   align-items: center;
   height: 100vh;
   width: 100%;
+  position: relative;
   ${({ bgColor }) => `background-color: ${bgColor};`};
   overflow: hidden;
+  .app-menu {
+    position: absolute;
+    top: 15px;
+    right: 2rem;
+    width: 30px;
+    height: 16px;
+  }
 `;
 
 export default App;

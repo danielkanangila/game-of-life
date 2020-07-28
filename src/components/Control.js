@@ -40,8 +40,8 @@ const Wrapper = styled.div`
   align-items: center;
 
   @media (min-width: 750px) {
-    width: 30%;
-    left: 35%;
+    width: 35%;
+    left: 32.5%;
   }
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;

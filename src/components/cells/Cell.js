@@ -13,22 +13,25 @@ const Cell = ({ val, onClick }) => {
       size={settings.cellSize}
       borderSize={settings.borderSize}
       borderColor={settings.borderColor}
+      aliveCellColor={settings.aliveCellColor}
+      deadCellColor={settings.deadCellColor}
     ></Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  ${({ size, borderSize, borderColor }) => `
+  ${({ size, borderSize, borderColor, aliveCellColor, deadCellColor }) => `
     width: ${size}px; height: ${size}px;
     border-bottom: ${borderSize}px solid ${borderColor};
     border-right: ${borderSize}px solid ${borderColor};
+    &.alive {
+      background-color: ${aliveCellColor};
+      border-color: ${deadCellColor};
+    }
+    &.dead {
+      background-color: ${deadCellColor};
+    }
  `};
-  &.alive {
-    background-color: black;
-  }
-  &.dead {
-    background-color: white;
-  }
 `;
 
 export default Cell;
