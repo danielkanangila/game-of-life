@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { AppContext } from "./contexts";
 import Game from "./components/Game";
 import Hamburger from "./components/Hamburger";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   // States
@@ -22,20 +24,19 @@ function App() {
     windowWidth: window.outerHeight,
     windowHeight: window.innerHeight,
   });
-  const [gameplay, setGameplay] = useState({
-    cells: [],
-    newGenerations: null,
-    generations: 0,
-  });
+  const [openSidebar, setOpenSidebar] = useState(false);
 
   return (
-    <AppContext.Provider
-      value={{ settings, setSettings, gameplay, setGameplay }}
-    >
+    <AppContext.Provider value={{ settings, setSettings }}>
       <Main className="app" bgColor={settings.backgroundColor}>
-        <div className="app-menu">
-          <Hamburger onClick={() => {}} />
+        <div className={`app-menu${openSidebar ? " sb-open" : ""}`}>
+          <Hamburger onClick={() => setOpenSidebar((status) => !status)} />
         </div>
+        <Sidebar
+          className={`sidebar${
+            openSidebar ? " sidebar-open" : " sidebar-close"
+          }`}
+        />
         <Game />
       </Main>
     </AppContext.Provider>
@@ -57,7 +58,16 @@ const Main = styled.div`
     top: 15px;
     right: 2rem;
     width: 30px;
-    height: 16px;
+    height: 30px;
+    z-index: 900;
+  }
+  .sidebar {
+    &-open {
+      width: 100%;
+    }
+    &-close {
+      width: 0;
+    }
   }
 `;
 

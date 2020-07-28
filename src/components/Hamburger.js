@@ -23,7 +23,7 @@ const Hamburger = ({ onClick }) => {
 const Wrapper = styled.div`
   position: relative;
   width: 30px;
-  height: 16px;
+  height: 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -34,14 +34,29 @@ const Wrapper = styled.div`
     height: 2px;
     margin-bottom: 4px;
     ${({ bgColor }) => `background-color: ${bgColor}`};
-
+    transition: all 0.3s;
+    &.open {
+      position: absolute;
+      width: 25px;
+      top: 10px;
+    }
     &:nth-child(1) {
+      &.open {
+        transform: rotate(-45deg);
+      }
     }
     &:nth-child(2) {
+      &.open {
+        display: none;
+      }
     }
     &:nth-child(3) {
       width: 70%;
       margin-bottom: 0;
+      &.open {
+        width: 25px;
+        transform: rotate(45deg);
+      }
     }
   }
 `;

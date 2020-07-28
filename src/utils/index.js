@@ -10,8 +10,9 @@ export const offsets = [
 ];
 
 export const create2DArray = (numOfRows, numOfCols) => {
-  return Array.from(Array(numOfRows), () =>
-    Array.from(Array(numOfCols), () => 0)
+  console.log(numOfCols);
+  return Array.from(Array(parseInt(numOfRows)), () =>
+    Array.from(Array(parseInt(numOfCols)), () => 0)
   );
 };
 
