@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { useTheme } from "../hooks/useTheme";
 import TextInput from "./TextInput";
 import { useSettings } from "../hooks";
+//import presets from "../presets.json";
 
 const Sidebar = ({ className }) => {
-  const [open, setOpen] = useState("settings");
+  const [open, setOpen] = useState("preset");
   const theme = useTheme();
 
   return (
@@ -15,7 +16,7 @@ const Sidebar = ({ className }) => {
           className={`tab${open === "preset" ? " active" : ""}`}
           onClick={() => setOpen("preset")}
         >
-          Preset
+          Presets
         </span>
         <span
           className={`tab${open === "settings" ? " active" : ""}`}
@@ -24,26 +25,24 @@ const Sidebar = ({ className }) => {
           Settings
         </span>
       </div>
-      <Preset open={open} />
+      <Presets open={open} />
       <Settings open={open} />
     </Wrapper>
   );
 };
 
 const Settings = ({ open }) => {
-  const { settings, setSettings } = useSettings();
+  const [settings, setSettings] = useSettings();
 
   const handleChange = (e) => {
     if (e.target.name === "numOfRows" || e.target.name === "numOfCols") {
       if (e.target.value >= 1) {
         setSettings({
-          ...settings,
           [e.target.name]: e.target.value,
         });
       }
     } else {
       setSettings({
-        ...settings,
         [e.target.name]: e.target.value,
       });
     }
@@ -79,7 +78,7 @@ const Settings = ({ open }) => {
   return <></>;
 };
 
-const Preset = ({ open }) => {
+const Presets = ({ open }) => {
   if (open === "preset") {
     return <div className="preset"></div>;
   }
@@ -96,7 +95,7 @@ const Wrapper = styled.div`
   top: 0;
   right: 0;
   ${({ theme }) => `background-color: ${theme.backgroundColor};`}
-  transition: all 0.3s;
+  transition: all 0.5s;
   -webkit-box-shadow: -5px 1px 9px -1px rgba(51, 51, 51, 1);
   -moz-box-shadow: -5px 1px 9px -1px rgba(51, 51, 51, 1);
   box-shadow: -5px 1px 9px -1px rgba(51, 51, 51, 1);

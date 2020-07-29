@@ -5,7 +5,7 @@ import Cell from "./Cell";
 import { useSettings } from "../../hooks";
 
 const Cells = ({ cells, handleCellClick }) => {
-  const { settings } = useSettings();
+  const [settings] = useSettings();
   return (
     <Wrapper
       numOfCols={settings.numOfCols}

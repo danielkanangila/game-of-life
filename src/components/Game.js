@@ -5,22 +5,23 @@ import produce from "immer";
 import Control from "./Control";
 import Cells from "./cells/Cells";
 import { create2DArray, newGenerations } from "../utils";
-import { useSettings } from "../hooks";
+import { useSettings, useInterval } from "../hooks";
 import Display from "./Display";
 
 const Game = () => {
-  const { settings, setSettings } = useSettings();
+  const [settings, setSettings] = useSettings();
   const [initialCells, setInitialCells] = useState(
     create2DArray(settings.numOfRows, settings.numOfCols)
   );
   const [cells, setCells] = useState(initialCells);
   const [timerId, settimerId] = useState(null);
   const [generations, setGenerations] = useState(0);
-  const [speed, setSpeed] = useState(160);
+  const [speed, setSpeed] = useState(100);
+  const [running, setRunning] = useState(false);
 
   useEffect(() => {
     let interval = null;
-    if (settings.running) {
+    if (running) {
       interval = setInterval(() => {
         setGenerations(generations + 1);
       }, speed);
@@ -29,10 +30,10 @@ const Game = () => {
     }
 
     return () => clearInterval(interval);
-  }, [settings.running, generations]);
+  }, [running, generations]);
 
   const handleCellClick = (rowIndex, colIndex, val) => {
-    if (settings.running) return;
+    if (running) return;
     const initialGen = produce(cells, (cellsCopy) => {
       cellsCopy[rowIndex][colIndex] = val ? 0 : 1;
     });
@@ -59,23 +60,20 @@ const Game = () => {
   };
 
   const onPlay = useCallback(() => {
-    if (!!settings.running) return clearTimeout(timerId);
+    if (!!running) return clearTimeout(timerId);
     runSimulation();
     settimerId(setTimeout(onPlay, speed));
   });
 
   const onStop = () => {
-    setSettings({
-      ...settings,
-      running: false,
-    });
+    setRunning(false);
     setGenerations(0);
     setCells(initialCells);
     clearInterval(timerId);
   };
 
   const seed = () => {
-    if (settings.running) return;
+    if (running) return;
     setCells((c) => {
       return produce(c, (cellsCopy) => {
         c.map((rows, rowIndex) => {
@@ -89,7 +87,13 @@ const Game = () => {
 
   return (
     <Wrapper>
-      <Control onPlay={onPlay} onStop={onStop} onSeed={seed} />
+      <Control
+        onPlay={onPlay}
+        onStop={onStop}
+        onSeed={seed}
+        running={running}
+        setRunning={setRunning}
+      />
       <Cells cells={cells} handleCellClick={handleCellClick} />
       <Display generations={generations} />
     </Wrapper>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useSettings } from "../../hooks";
 
 const Cell = ({ val, onClick }) => {
-  const { settings } = useSettings();
+  const [settings] = useSettings();
 
   return (
     <Wrapper

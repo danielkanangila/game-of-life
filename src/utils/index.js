@@ -10,7 +10,6 @@ export const offsets = [
 ];
 
 export const create2DArray = (numOfRows, numOfCols) => {
-  console.log(numOfCols);
   return Array.from(Array(parseInt(numOfRows)), () =>
     Array.from(Array(parseInt(numOfCols)), () => 0)
   );
@@ -24,7 +23,8 @@ export const computeNeighbors = (
   numOfCols
 ) => {
   let neighbors = 0;
-  offsets.forEach(([x, y]) => {
+  offsets.map((offset) => {
+    const [x, y] = offset;
     const nRowIndex = rowIndex + x;
     const nColIndex = colIndex + y;
     if (
