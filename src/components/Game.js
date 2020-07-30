@@ -4,7 +4,7 @@ import produce from "immer";
 
 import Control from "./Control";
 import Cells from "./cells/Cells";
-import { create2DArray, newGenerations } from "../utils";
+import { newGenerations, create2DArray } from "../utils";
 import { useSettings } from "../hooks";
 import Display from "./Display";
 
@@ -33,6 +33,12 @@ const Game = () => {
   useEffect(() => {
     if (settings.preset.length) setCells(settings.preset);
   }, [settings.preset]);
+
+  // watch board size change
+  useEffect(() => {
+    const cells = create2DArray(settings.numOfRows, settings.numOfCols);
+    setCells(cells);
+  }, [settings.numOfRows, settings.numOfCols]);
 
   const handleCellClick = (rowIndex, colIndex, val) => {
     if (running) return;
@@ -70,7 +76,7 @@ const Game = () => {
   const onStop = () => {
     setRunning(false);
     setGenerations(0);
-    setCells(settings.initialCells);
+    setCells(create2DArray(settings.numOfRows, settings.numOfCols));
     clearInterval(timerId);
   };
 

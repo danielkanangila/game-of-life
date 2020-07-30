@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useSettings } from "../hooks";
 import TextInput from "./TextInput";
+import { create2DArray } from "../utils";
 
-const Settings = ({ open, forceUpdate }) => {
+const Settings = ({ open }) => {
   const [settings, setSettings] = useSettings();
   const { numOfRows, numOfCols, cellSize } = settings;
   const [state, setState] = useState({
@@ -10,6 +11,7 @@ const Settings = ({ open, forceUpdate }) => {
     numOfCols,
     cellSize,
   });
+  const [error, setError] = useState();
 
   const handleChange = (e) => {
     setState({
@@ -28,6 +30,19 @@ const Settings = ({ open, forceUpdate }) => {
     //     [e.target.name]: parseInt(e.target.value),
     //   });
     // }
+  };
+
+  const onUpdate = () => {
+    if (state.numOfRows < 2 || state.numOfCols < 2 || state.cellSize < 10) {
+      setError(
+        "Rows number and Columns number must equal or greater than 2, and cell size must be equal or greater than 10"
+      );
+      return;
+    }
+    setSettings({
+      ...settings,
+      ...state,
+    });
   };
 
   if (open === "settings") {
@@ -54,9 +69,10 @@ const Settings = ({ open, forceUpdate }) => {
           value={state.cellSize}
           handleChange={handleChange}
         />
-        <button onClick={() => forceUpdate((f) => !f)} className="btn">
+        <button onClick={onUpdate} className="btn">
           Update
         </button>
+        {error && <div className="alert danger">{error}</div>}
       </div>
     );
   }
