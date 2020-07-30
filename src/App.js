@@ -1,30 +1,49 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { AppContext } from "./contexts";
 import Game from "./components/Game";
 import Hamburger from "./components/Hamburger";
 import Sidebar from "./components/Sidebar";
 import Logo from "./components/Logo";
-import { useSettings } from "./hooks";
+import { useForceUpdate } from "./hooks";
 
 function App() {
-  const [openSidebar, setOpenSidebar] = useState(false);
-
-  const [settings] = useSettings();
+  const [openSidebar, setOpenSidebar] = useState(true);
+  const [settings, setSettings] = useState({
+    numOfRows: 25,
+    numOfCols: 50,
+    cellSize: 20,
+    borderSize: 1,
+    borderColor: "#fff",
+    backgroundColor: "#1B1C1E",
+    aliveCellColor: "#fff",
+    deadCellColor: "#1B1C1E",
+    running: false,
+    windowWidth: window.outerHeight,
+    windowHeight: window.innerHeight,
+    preset: [],
+  });
+  const { forceUpdate } = useForceUpdate();
 
   return (
-    <Main className="app" bgColor={settings.backgroundColor}>
-      <div className="logo">
-        <Logo />
-      </div>
-      <div className={`app-menu${openSidebar ? " sb-open" : ""}`}>
-        <Hamburger onClick={() => setOpenSidebar((status) => !status)} />
-      </div>
-      <Sidebar
-        className={`sidebar${openSidebar ? " sidebar-open" : " sidebar-close"}`}
-      />
-      <Game />
-    </Main>
+    <AppContext.Provider value={{ settings, setSettings }}>
+      <Main className="app" bgColor={settings.backgroundColor}>
+        <div className="logo">
+          <Logo />
+        </div>
+        <div className={`app-menu${openSidebar ? " sb-open" : ""}`}>
+          <Hamburger onClick={() => setOpenSidebar((status) => !status)} />
+        </div>
+        <Sidebar
+          className={`sidebar${
+            openSidebar ? " sidebar-open" : " sidebar-close"
+          }`}
+          forceUpdate={forceUpdate}
+        />
+        <Game />
+      </Main>
+    </AppContext.Provider>
   );
 }
 

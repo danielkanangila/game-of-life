@@ -5,18 +5,18 @@ import produce from "immer";
 import Control from "./Control";
 import Cells from "./cells/Cells";
 import { create2DArray, newGenerations } from "../utils";
-import { useSettings, useInterval } from "../hooks";
+import { useSettings } from "../hooks";
 import Display from "./Display";
 
 const Game = () => {
-  const [settings, setSettings] = useSettings();
-  const [initialCells, setInitialCells] = useState(
+  const [settings] = useSettings();
+  const [initialCells] = useState(
     create2DArray(settings.numOfRows, settings.numOfCols)
   );
   const [cells, setCells] = useState(initialCells);
   const [timerId, settimerId] = useState(null);
   const [generations, setGenerations] = useState(0);
-  const [speed, setSpeed] = useState(100);
+  const [speed] = useState(100);
   const [running, setRunning] = useState(false);
 
   useEffect(() => {
@@ -31,6 +31,12 @@ const Game = () => {
 
     return () => clearInterval(interval);
   }, [running, generations]);
+
+  // handle preset selected
+  useEffect(() => {
+    console.log(settings.preset);
+  }, [settings.preset]);
+  console.log("it");
 
   const handleCellClick = (rowIndex, colIndex, val) => {
     if (running) return;
