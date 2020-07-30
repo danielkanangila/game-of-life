@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useSettings } from "../hooks/useSettings";
 import Icon from "./Icon";
 
 const Control = ({ onPlay, onStop, onSeed, running, setRunning }) => {
-  const [settings, setSettings] = useSettings();
-
   const onRunning = async () => {
     await onPlay();
     setRunning(!running);

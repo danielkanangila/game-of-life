@@ -4,19 +4,16 @@ import produce from "immer";
 
 import Control from "./Control";
 import Cells from "./cells/Cells";
-import { create2DArray, newGenerations } from "../utils";
-import { useSettings, useInterval } from "../hooks";
+import { nextGeneration, create2DArray } from "../utils";
+import { useSettings } from "../hooks";
 import Display from "./Display";
 
 const Game = () => {
-  const [settings, setSettings] = useSettings();
-  const [initialCells, setInitialCells] = useState(
-    create2DArray(settings.numOfRows, settings.numOfCols)
-  );
-  const [cells, setCells] = useState(initialCells);
+  const [settings] = useSettings();
+  const [cells, setCells] = useState(settings.initialCells);
   const [timerId, settimerId] = useState(null);
   const [generations, setGenerations] = useState(0);
-  const [speed, setSpeed] = useState(100);
+  const [speed] = useState(100);
   const [running, setRunning] = useState(false);
 
   useEffect(() => {
@@ -32,6 +29,17 @@ const Game = () => {
     return () => clearInterval(interval);
   }, [running, generations]);
 
+  // handle preset selected
+  useEffect(() => {
+    if (settings.preset.length) setCells(settings.preset);
+  }, [settings.preset]);
+
+  // watch board size change
+  useEffect(() => {
+    const cells = create2DArray(settings.numOfRows, settings.numOfCols);
+    setCells(cells);
+  }, [settings.numOfRows, settings.numOfCols]);
+
   const handleCellClick = (rowIndex, colIndex, val) => {
     if (running) return;
     const initialGen = produce(cells, (cellsCopy) => {
@@ -45,7 +53,7 @@ const Game = () => {
       return produce(c, (cellsCopy) => {
         c.map((rows, rowIndex) => {
           rows.map((col, colIndex) => {
-            cellsCopy = newGenerations(
+            cellsCopy = nextGeneration(
               c,
               cellsCopy,
               rowIndex,
@@ -68,7 +76,7 @@ const Game = () => {
   const onStop = () => {
     setRunning(false);
     setGenerations(0);
-    setCells(initialCells);
+    setCells(create2DArray(settings.numOfRows, settings.numOfCols));
     clearInterval(timerId);
   };
 

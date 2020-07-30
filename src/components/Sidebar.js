@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useTheme } from "../hooks/useTheme";
-import TextInput from "./TextInput";
-import { useSettings } from "../hooks";
-//import presets from "../presets.json";
+import Settings from "./Settings";
+import Presets from "./Presets";
+import About from "./About";
 
-const Sidebar = ({ className }) => {
+const Sidebar = ({ className, forceUpdate }) => {
   const [open, setOpen] = useState("preset");
   const theme = useTheme();
 
@@ -24,69 +24,22 @@ const Sidebar = ({ className }) => {
         >
           Settings
         </span>
+        <span
+          className={`tab${open === "about" ? " active" : ""}`}
+          onClick={() => setOpen("about")}
+        >
+          About
+        </span>
       </div>
-      <Presets open={open} />
-      <Settings open={open} />
+      <Presets open={open} forceUpdate={forceUpdate} />
+      <Settings open={open} forceUpdate={forceUpdate} />
+      <About open={open} />
     </Wrapper>
   );
 };
 
-const Settings = ({ open }) => {
-  const [settings, setSettings] = useSettings();
-
-  const handleChange = (e) => {
-    if (e.target.name === "numOfRows" || e.target.name === "numOfCols") {
-      if (e.target.value >= 1) {
-        setSettings({
-          [e.target.name]: e.target.value,
-        });
-      }
-    } else {
-      setSettings({
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  if (open === "settings") {
-    return (
-      <div className="settings">
-        <TextInput
-          label="Rows #"
-          type="number"
-          name="numOfRows"
-          value={settings.numOfRows}
-          handleChange={handleChange}
-        />
-        <TextInput
-          label="Columns #"
-          type="number"
-          name="numOfCols"
-          value={settings.numOfCols}
-          handleChange={handleChange}
-        />
-        <TextInput
-          label="Cell size"
-          type="number"
-          name="cellSize"
-          value={settings.cellSize}
-          handleChange={handleChange}
-        />
-      </div>
-    );
-  }
-  return <></>;
-};
-
-const Presets = ({ open }) => {
-  if (open === "preset") {
-    return <div className="preset"></div>;
-  }
-  return <></>;
-};
-
 const Wrapper = styled.div`
-  max-width: 350px;
+  max-width: 450px;
   width: 0;
   height: 100vh;
   overflow-y: auto;
@@ -137,8 +90,30 @@ const Wrapper = styled.div`
     }
   }
   .settings,
-  .preset {
+  .presets {
     padding: 15px;
+  }
+  .settings {
+    .btn {
+      color: #fff;
+      &:hover {
+        color: #1b1c1e;
+        background-color: #fff;
+      }
+    }
+  }
+
+  .presets-item {
+    h2 {
+      font-size: 1rem;
+      ${({ theme }) => `color: ${theme.borderColor}`};
+      padding: 15px 0;
+    }
+    img {
+      width: 150px;
+      height: 100px;
+      cursor: pointer;
+    }
   }
 `;
 

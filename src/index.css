@@ -24,3 +24,15 @@ button {
 .btn:hover {
   background-color: #ccc;
 }
+
+.alert {
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+}
+
+.alert.danger {
+  background-color: red;
+  color: white;
+}
