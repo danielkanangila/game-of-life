@@ -62,6 +62,7 @@ const About = ({ open }) => {
           <a
             target="_blank"
             href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life"
+            rel="noopener noreferrer"
           >
             https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
           </a>

@@ -6,7 +6,7 @@ import Presets from "./Presets";
 import About from "./About";
 
 const Sidebar = ({ className, forceUpdate }) => {
-  const [open, setOpen] = useState("about");
+  const [open, setOpen] = useState("preset");
   const theme = useTheme();
 
   return (

@@ -4,7 +4,7 @@ import produce from "immer";
 
 import Control from "./Control";
 import Cells from "./cells/Cells";
-import { newGenerations, create2DArray } from "../utils";
+import { nextGeneration, create2DArray } from "../utils";
 import { useSettings } from "../hooks";
 import Display from "./Display";
 
@@ -53,7 +53,7 @@ const Game = () => {
       return produce(c, (cellsCopy) => {
         c.map((rows, rowIndex) => {
           rows.map((col, colIndex) => {
-            cellsCopy = newGenerations(
+            cellsCopy = nextGeneration(
               c,
               cellsCopy,
               rowIndex,

@@ -39,7 +39,7 @@ export const computeNeighbors = (
   return neighbors;
 };
 
-export const newGenerations = (
+export const nextGeneration = (
   cells,
   cellsCopy,
   rowIndex,

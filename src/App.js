@@ -10,7 +10,7 @@ import { useForceUpdate } from "./hooks";
 import { create2DArray } from "./utils";
 
 function App() {
-  const [openSidebar, setOpenSidebar] = useState(true);
+  const [openSidebar, setOpenSidebar] = useState(false);
   const [settings, setSettings] = useState({
     numOfRows: 25,
     numOfCols: 50,
