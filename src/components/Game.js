@@ -34,9 +34,8 @@ const Game = () => {
 
   // handle preset selected
   useEffect(() => {
-    console.log(settings.preset);
+    if (settings.preset.length) setCells(settings.preset);
   }, [settings.preset]);
-  console.log("it");
 
   const handleCellClick = (rowIndex, colIndex, val) => {
     if (running) return;

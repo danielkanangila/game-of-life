@@ -15,13 +15,13 @@ const Presets = ({ open, forceUpdate }) => {
   return <></>;
 };
 
-const Preset = ({ name, image, cells, forceUpdate }) => {
-  const [, setSettings] = useSettings();
+const Preset = ({ name, image, cells }) => {
+  const [settings, setSettings] = useSettings();
   const handleClick = (preset) => {
     setSettings({
+      ...settings,
       preset,
     });
-    forceUpdate((f) => !f);
   };
 
   return (
