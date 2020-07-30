@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { useTheme } from "../hooks/useTheme";
 import Settings from "./Settings";
 import Presets from "./Presets";
+import About from "./About";
 
 const Sidebar = ({ className, forceUpdate }) => {
-  const [open, setOpen] = useState("preset");
+  const [open, setOpen] = useState("about");
   const theme = useTheme();
 
   return (
@@ -23,9 +24,16 @@ const Sidebar = ({ className, forceUpdate }) => {
         >
           Settings
         </span>
+        <span
+          className={`tab${open === "about" ? " active" : ""}`}
+          onClick={() => setOpen("about")}
+        >
+          About
+        </span>
       </div>
       <Presets open={open} forceUpdate={forceUpdate} />
       <Settings open={open} forceUpdate={forceUpdate} />
+      <About open={open} />
     </Wrapper>
   );
 };
