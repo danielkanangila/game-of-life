@@ -7,12 +7,14 @@ import Hamburger from "./components/Hamburger";
 import Sidebar from "./components/Sidebar";
 import Logo from "./components/Logo";
 import { useForceUpdate } from "./hooks";
+import { create2DArray } from "./utils";
 
 function App() {
   const [openSidebar, setOpenSidebar] = useState(true);
   const [settings, setSettings] = useState({
     numOfRows: 25,
     numOfCols: 50,
+    initialCells: create2DArray(25, 50),
     cellSize: 20,
     borderSize: 1,
     borderColor: "#fff",

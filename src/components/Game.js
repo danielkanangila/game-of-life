@@ -10,10 +10,7 @@ import Display from "./Display";
 
 const Game = () => {
   const [settings] = useSettings();
-  const [initialCells] = useState(
-    create2DArray(settings.numOfRows, settings.numOfCols)
-  );
-  const [cells, setCells] = useState(initialCells);
+  const [cells, setCells] = useState(settings.initialCells);
   const [timerId, settimerId] = useState(null);
   const [generations, setGenerations] = useState(0);
   const [speed] = useState(100);
@@ -73,7 +70,7 @@ const Game = () => {
   const onStop = () => {
     setRunning(false);
     setGenerations(0);
-    setCells(initialCells);
+    setCells(settings.initialCells);
     clearInterval(timerId);
   };
 
