@@ -5,7 +5,7 @@ import Settings from "./Settings";
 import Presets from "./Presets";
 
 const Sidebar = ({ className, forceUpdate }) => {
-  const [open, setOpen] = useState("settings");
+  const [open, setOpen] = useState("preset");
   const theme = useTheme();
 
   return (
@@ -31,7 +31,7 @@ const Sidebar = ({ className, forceUpdate }) => {
 };
 
 const Wrapper = styled.div`
-  max-width: 350px;
+  max-width: 450px;
   width: 0;
   height: 100vh;
   overflow-y: auto;

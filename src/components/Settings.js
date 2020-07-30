@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useSettings } from "../hooks";
 import TextInput from "./TextInput";
-import { create2DArray } from "../utils";
 
 const Settings = ({ open }) => {
   const [settings, setSettings] = useSettings();
@@ -18,18 +17,6 @@ const Settings = ({ open }) => {
       ...state,
       [e.target.name]: parseInt(e.target.value),
     });
-    // if (e.target.name === "numOfRows" || e.target.name === "numOfCols") {
-    //   if (e.target.value >= 1) {
-    //     setSettings({
-    //       [e.target.name]: parseInt(e.target.value),
-    //     });
-    //   }
-    // } else {
-    //   setSettings({
-    //       ...settings,
-    //     [e.target.name]: parseInt(e.target.value),
-    //   });
-    // }
   };
 
   const onUpdate = () => {
